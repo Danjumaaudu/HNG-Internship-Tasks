@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 //rate-limting
-const limiter = rateLimit({ windowMs: 60 * 1000, max: 10 });
+const limiter = rateLimit({ windowMs: 60 * 1000, max: 15 });
 
 app.use(cors());
 
