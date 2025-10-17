@@ -26,5 +26,5 @@ app.get("/", (req, res) => {
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_documentation_1.swaggerspec));
 app.use("/me", me_1.default);
 app.listen(PORT, () => {
-    console.log(`Server running in http://localhost:${PORT}`);
+    console.log(`Server running in Port ${PORT}`);
 });

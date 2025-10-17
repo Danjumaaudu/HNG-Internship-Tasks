@@ -30,5 +30,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerspec)
 app.use("/me", merouter);
 
 app.listen(PORT, () => {
-  console.log(`Server running in http://localhost:${PORT}`);
+  console.log(`Server running in Port ${PORT}`);
 });
