@@ -15,8 +15,6 @@
    ¬Axios - for collecting data from the exteral Api
    
    ¬CORS,MORGAN, Express-rate-limiter and dotenv - used for best pratices and stablity
-   
-   ¬Swagger UI - used for documentation
 
 
 #   Features 
@@ -31,7 +29,7 @@
     
     ¬Uses environment variables for configuration
 
-    ¬Swagger documentation available at /api-docs
+   
 
 # HOW TO RUN LOCALLY 
    1. Clone the repository 
