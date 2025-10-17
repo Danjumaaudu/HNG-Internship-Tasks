@@ -14,7 +14,7 @@ const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
 //rate-limting
 const limiter = (0, express_rate_limit_1.default)({ windowMs: 60 * 1000, max: 15 });
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({ origin: "*" }));
 //logging for debuugging
 app.use((0, morgan_1.default)("dev"));
 app.use(limiter);

@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 //rate-limting
 const limiter = rateLimit({ windowMs: 60 * 1000, max: 15 });
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 
 //logging for debuugging
 app.use(morgan("dev"));
