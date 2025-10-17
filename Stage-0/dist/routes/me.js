@@ -30,7 +30,7 @@ merouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 stack: process.env.USER_STACK,
             },
             timestamp: timestamp,
-            fact: "Testing deployment — no API call yet,",
+            fact: catFact
         };
         console.log("Fact: ", catFact);
         res.status(200).json(data);

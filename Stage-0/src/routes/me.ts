@@ -22,7 +22,7 @@ merouter.get("/", async (req: Request, res: Response) => {
       },
 
       timestamp: timestamp,
-      fact: "Testing deployment — no API call yet,",
+      fact: catFact
     };
     console.log("Fact: ", catFact);
     res.status(200).json(data);
