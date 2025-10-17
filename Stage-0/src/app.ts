@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 
 
 
-app.use("/", merouter);
+app.use("/me", merouter);
 
 app.listen(PORT, () => {
   console.log(`Server running in Port ${PORT}`);
