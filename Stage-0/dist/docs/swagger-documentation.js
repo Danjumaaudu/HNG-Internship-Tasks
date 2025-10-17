@@ -20,7 +20,7 @@ const swaggerDefinition = {
 };
 const options = {
     swaggerDefinition,
-    // apis : ["./src/routes/me.ts"],
+    apis: ["./src/routes/me.js"],
 };
 exports.swaggerspec = (0, swagger_jsdoc_1.default)(options);
 //# sourceMappingURL=swagger-documentation.js.map
