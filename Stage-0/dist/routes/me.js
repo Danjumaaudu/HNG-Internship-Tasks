@@ -84,3 +84,4 @@ merouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
  *                   example: "Cats random facts"
  */
 exports.default = merouter;
+//# sourceMappingURL=me.js.map

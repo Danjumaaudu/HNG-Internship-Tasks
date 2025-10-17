@@ -23,3 +23,4 @@ const options = {
     apis: ["./src/routes/me.ts"],
 };
 exports.swaggerspec = (0, swagger_jsdoc_1.default)(options);
+//# sourceMappingURL=swagger-documentation.js.map

@@ -28,3 +28,4 @@ app.use("/me", me_1.default);
 app.listen(PORT, () => {
     console.log(`Server running in Port ${PORT}`);
 });
+//# sourceMappingURL=app.js.map
