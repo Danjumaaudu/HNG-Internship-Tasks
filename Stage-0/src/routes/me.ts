@@ -34,46 +34,5 @@ merouter.get("/", async (req: Request, res: Response) => {
   }
 });
 
-/**
- * @swagger
- * /me:
- *   get:
- *     summary: Fetches user info and a random cat fact
- *     description: >
- *       Returns the developer's basic info along with a **random cat fact** fetched
- *       dynamically from the Cat Facts API each time this endpoint is called.
- *       <br><br>
- *       _Note: Example values shown below are for documentation only. Actual responses vary._
- *     responses:
- *       200:
- *         description: Successful response
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 user:
- *                   type: object
- *                   properties:
- *                     email:
- *                       type: string
- *                       example: "user@gmail.com"
- *                     name:
- *                       type: string
- *                       example: "Full Name"
- *                     stack:
- *                       type: string
- *                       example: "My Tech stack"
- *                 timestamp:
- *                   type: string
- *                   format: date-time
- *                   example: "2025-10-15T18:30:00.000Z"
- *                 fact:
- *                   type: string
- *                   example: "Cats random facts"
- */
 
 export default merouter;

@@ -4,7 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
-import { swaggerspec } from "./docs/swagger-documentation";
+
 import swaggerUi from "swagger-ui-express";
 
 dotenv.config();
@@ -24,8 +24,7 @@ app.get("/", (req, res) => {
   res.send("Getting credentials and fact checks");
 });
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerspec)
-)
+
 
 app.use("/me", merouter);
 
