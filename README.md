@@ -4,7 +4,12 @@
    
    This project is my submission to HNG internship stage 0 (Backend Track).
 
-   Its a simple restful api thats returns my profile information along side with a random cat fact fetched from an external api
+# Base URL
+https://hng-internship-tasks.pxxl.click/me
+# Endpont
+
+   This is  a simple GET/me Endpoint that returns my profile information alongside a random cat fact fetched from an external api
+
 
 #   Tech Stack used
    
@@ -12,9 +17,9 @@
    
    ¬typescript
    
-   ¬Axios - for collecting data from the exteral Api
+   ¬Axios - for collecting data from the external Api
    
-   ¬CORS,MORGAN, Express-rate-limiter and dotenv - used for best pratices and stablity
+   ¬CORS, MORGAN, Express-rate-limiter, and dotenv - used for best practices and stability
 
 
 #   Features 
@@ -38,7 +43,7 @@
    2. Install dependecies
         npm install 
 
-   3. Create a .env file in directory 
+   3. Create a .env file in the directory 
         CAT_API_URL=https://catfact.ninja/fact
         USER_EMAIL=youremail@example.com
         USER_NAME=Your Full Name
@@ -46,9 +51,5 @@
     4. Run the development Server
         npm run dev
 
-#  Visit:
 
-     API Endpoint: http://localhost:3000/me
-
-     Swagger Docs: http://localhost:3000/api-docs
    
