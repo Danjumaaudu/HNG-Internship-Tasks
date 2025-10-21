@@ -2,11 +2,11 @@
   "name": "stage-1",
   "version": "1.0.0",
   "description": "String-Analyzer",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "",
-    "build": "",
+    "start": "node dist/app.js",
+    "build": "tsc",
     "dev": "ts-node-dev --respawn src/app.ts"
   },
   "keywords": [],
