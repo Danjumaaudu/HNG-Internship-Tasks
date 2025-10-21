@@ -1,0 +1,101 @@
+{
+  "mama": {
+    "id": "ccb711f092ac8ef1805b5045fab7e8a6189cb97ad04565e21b5fbcfc9e542e42",
+    "value": "mama",
+    "properties": {
+      "Length": 4,
+      "is_palindrome": false,
+      "unique_characters": 2,
+      "word_count": 1,
+      "sha256_hash": "ccb711f092ac8ef1805b5045fab7e8a6189cb97ad04565e21b5fbcfc9e542e42",
+      "character_frequency": {
+        "m": 2,
+        "a": 2
+      }
+    },
+    "created_at": "2025-10-21T12:28:23.289Z"
+  },
+  "papa": {
+    "id": "58cc6181518fbfb49da9c50db08ce31aa92feebaecc6c46a3a8084e87b50f037",
+    "value": "papa",
+    "properties": {
+      "Length": 4,
+      "is_palindrome": false,
+      "unique_characters": 2,
+      "word_count": 1,
+      "sha256_hash": "58cc6181518fbfb49da9c50db08ce31aa92feebaecc6c46a3a8084e87b50f037",
+      "character_frequency": {
+        "p": 2,
+        "a": 2
+      }
+    },
+    "created_at": "2025-10-21T12:28:29.856Z"
+  },
+  "dada": {
+    "id": "47c7ef39cfa6b7bd1286d9c83424f322741549e849ad1af19a8416e861434da5",
+    "value": "dada",
+    "properties": {
+      "Length": 4,
+      "is_palindrome": false,
+      "unique_characters": 2,
+      "word_count": 1,
+      "sha256_hash": "47c7ef39cfa6b7bd1286d9c83424f322741549e849ad1af19a8416e861434da5",
+      "character_frequency": {
+        "d": 2,
+        "a": 2
+      }
+    },
+    "created_at": "2025-10-21T12:28:38.347Z"
+  },
+  "lier": {
+    "id": "830439e6ec9502225c9409103ef009b553b4d51ca9eb26aca8a758e870f50285",
+    "value": "lier",
+    "properties": {
+      "Length": 4,
+      "is_palindrome": false,
+      "unique_characters": 4,
+      "word_count": 1,
+      "sha256_hash": "830439e6ec9502225c9409103ef009b553b4d51ca9eb26aca8a758e870f50285",
+      "character_frequency": {
+        "l": 1,
+        "i": 1,
+        "e": 1,
+        "r": 1
+      }
+    },
+    "created_at": "2025-10-21T12:28:46.500Z"
+  },
+  "dodo": {
+    "id": "c2ba348d1ffd70736f32541d3e1e9e1f253287cd4668a5659ab22aac9d474abe",
+    "value": "dodo",
+    "properties": {
+      "Length": 4,
+      "is_palindrome": false,
+      "unique_characters": 2,
+      "word_count": 1,
+      "sha256_hash": "c2ba348d1ffd70736f32541d3e1e9e1f253287cd4668a5659ab22aac9d474abe",
+      "character_frequency": {
+        "d": 2,
+        "o": 2
+      }
+    },
+    "created_at": "2025-10-21T12:28:52.658Z"
+  },
+  "madama": {
+    "id": "039cae8f1cdb9e077a131ea226e4809af1bf3d569ca3c3a5bde205018479da84",
+    "value": "madama",
+    "properties": {
+      "Length": 6,
+      "is_palindrome": false,
+      "unique_characters": 3,
+      "word_count": 1,
+      "sha256_hash": "039cae8f1cdb9e077a131ea226e4809af1bf3d569ca3c3a5bde205018479da84",
+      "character_frequency": {
+        "m": 2,
+        "a": 3,
+        "d": 1
+      }
+    },
+    "created_at": "2025-10-21T12:29:16.412Z"
+  }
+}
