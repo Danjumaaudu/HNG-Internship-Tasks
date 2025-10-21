@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
         }
     });
 });
-app.use("/string", String_routes_1.default);
+app.use("/strings", String_routes_1.default);
 app.listen(PORT, () => {
     console.log(`Server running in Port ${PORT}`);
 });

@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.use("/string",String_router )
+app.use("/strings",String_router )
 
 
 app.listen(PORT, () => {

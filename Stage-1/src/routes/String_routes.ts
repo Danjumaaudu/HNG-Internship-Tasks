@@ -1,24 +1,25 @@
 import { Router, Request, Response } from "express";
 import { analyzeString } from "../helper";
 import { readDATA, writeData } from "../storage";
-import path from "path";
-import fs from "fs"
 
 const String_router = Router();
 
-
-// Load stored data from JSON
+// 🔄 Reload data before each request
 let analyzeStrings = readDATA();
 
-// ✅ POST /string — Add new value
+// ✅ POST /strings — Create and analyze a new string
 String_router.post("/", (req: Request, res: Response) => {
   const { value } = req.body;
 
-  if (!value) return res.status(400).json({ error: "missing 'value' field" });
+  // Validation
+  if (value === undefined)
+    return res.status(400).json({ error: "Missing 'value' field" });
   if (typeof value !== "string")
-    return res.status(422).json({ error: "not a string" });
+    return res.status(422).json({ error: "'value' must be a string" });
+
+  analyzeStrings = readDATA();
   if (analyzeStrings[value])
-    return res.status(409).json({ error: "value already exists" });
+    return res.status(409).json({ error: "String already exists" });
 
   const properties = analyzeString(value);
   const response = {
@@ -28,77 +29,16 @@ String_router.post("/", (req: Request, res: Response) => {
     created_at: new Date().toISOString(),
   };
 
-  analyzeStrings[value] = response; // save in memory
-  writeData(analyzeStrings); // persist to file
+  analyzeStrings[value] = response;
+  writeData(analyzeStrings);
 
-  res.status(201).json(response);
+  return res.status(201).json(response);
 });
 
-// ✅ GET /string/filter_by_natural_language
-String_router.get(
-  "/filter_by_natural_language",
-  (req: Request, res: Response) => {
-    const queryParam = req.query.query;
-
-    if (!queryParam || typeof queryParam !== "string") {
-      return res
-        .status(400)
-        .json({ error: "Missing or invalid 'query' parameter" });
-    }
-
-    const query = queryParam.toLowerCase();
-    const filter: any = {};
-
-    if (query.includes("palindromic")) filter.is_palindrome = true;
-    if (query.includes("single word")) filter.word_count = 1;
-
-    const lengthMatch = query.match(/longer than (\d+)/);
-    if (lengthMatch) filter.min_length = parseInt(lengthMatch[1]);
-
-    const containMatch = query.match(/containing letter ([a-z])/);
-    if (containMatch) filter.contains_character = containMatch[1];
-
-    let results = Object.values(analyzeStrings);
-
-    if (filter.is_palindrome !== undefined) {
-      results = results.filter(
-        (item: any) => item.properties.is_palindrome === filter.is_palindrome
-      );
-    }
-
-    if (filter.word_count !== undefined) {
-      results = results.filter(
-        (item: any) => item.properties.word_count === filter.word_count
-      );
-    }
-
-    if (filter.min_length !== undefined) {
-      results = results.filter(
-        (item: any) => item.properties.Length > filter.min_length
-      );
-    }
-
-    if (filter.contains_character) {
-      results = results.filter((item: any) =>
-        item.value.includes(filter.contains_character)
-      );
-    }
-
-    return res.status(200).json({
-      data: results,
-      count: results.length,
-      interpreted_query: {
-        original_query: query,
-        parsed_filter: filter,
-      },
-    });
-  }
-);
-
-
-
-// ✅ GET /string — Filtered list
+// ✅ GET /strings — Retrieve all strings (with optional filters)
 String_router.get("/", (req: Request, res: Response) => {
+  analyzeStrings = readDATA();
+
   const {
     is_palindrome,
     min_length,
@@ -110,20 +50,20 @@ String_router.get("/", (req: Request, res: Response) => {
   let results = Object.values(analyzeStrings);
 
   if (is_palindrome !== undefined) {
-    const boolValue = is_palindrome === "true";
+    const boolVal = is_palindrome === "true";
     results = results.filter(
-      (item: any) => item.properties.is_palindrome === boolValue
+      (item: any) => item.properties.is_palindrome === boolVal
     );
   }
 
   if (min_length) {
     const min = parseInt(min_length as string, 10);
-    results = results.filter((item: any) => item.properties.Length >= min);
+    results = results.filter((item: any) => item.properties.length >= min);
   }
 
   if (max_length) {
     const max = parseInt(max_length as string, 10);
-    results = results.filter((item: any) => item.properties.Length <= max);
+    results = results.filter((item: any) => item.properties.length <= max);
   }
 
   if (word_count) {
@@ -138,10 +78,10 @@ String_router.get("/", (req: Request, res: Response) => {
     results = results.filter((item: any) => item.value.includes(char));
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     data: results,
     count: results.length,
-    filters_length: {
+    filters_applied: {
       is_palindrome,
       min_length,
       max_length,
@@ -151,27 +91,92 @@ String_router.get("/", (req: Request, res: Response) => {
   });
 });
 
-String_router.delete("/:value", (req, res) => {
-    const data = readDATA();
+
+
+
+// ✅ GET /strings/filter-by-natural-language — Basic NL filtering
+String_router.get(
+  "/filter-by-natural-language",
+  (req: Request, res: Response) => {
+    analyzeStrings = readDATA();
+    const { query } = req.query;
+
+    if (!query || typeof query !== "string") {
+      return res.status(400).json({ error: "Missing or invalid 'query' parameter" });
+    }
+
+    const q = query.toLowerCase();
+    const filters: any = {};
+
+    // Keyword matching
+    if (q.includes("palindromic")) filters.is_palindrome = true;
+    if (q.includes("single word")) filters.word_count = 1;
+
+    const lengthMatch = q.match(/longer than (\d+)/);
+    if (lengthMatch) filters.min_length = parseInt(lengthMatch[1], 10);
+
+    const charMatch = q.match(/containing the letter ([a-z])/);
+    if (charMatch) filters.contains_character = charMatch[1];
+
+    let results = Object.values(analyzeStrings);
+
+    if (filters.is_palindrome !== undefined) {
+      results = results.filter(
+        (item: any) => item.properties.is_palindrome === filters.is_palindrome
+      );
+    }
+
+    if (filters.word_count !== undefined) {
+      results = results.filter(
+        (item: any) => item.properties.word_count === filters.word_count
+      );
+    }
+
+    if (filters.min_length !== undefined) {
+      results = results.filter(
+        (item: any) => item.properties.length > filters.min_length
+      );
+    }
+
+    if (filters.contains_character) {
+      results = results.filter((item: any) =>
+        item.value.includes(filters.contains_character)
+      );
+    }
+
+    return res.status(200).json({
+      data: results,
+      count: results.length,
+      interpreted_query: {
+        original: query,
+        parsed_filters: filters,
+      },
+    });
+  }
+);
+
+
+// ✅ DELETE /strings/:value — Delete a specific string
+String_router.delete("/:value", (req: Request, res: Response) => {
+  analyzeStrings = readDATA();
   const { value } = req.params;
 
-  if (!data[value]) {
+  if (!analyzeStrings[value])
     return res.status(404).json({ error: "String not found" });
-  }
 
-  delete data[value];
-  writeData(data);
+  delete analyzeStrings[value];
+  writeData(analyzeStrings);
+
   return res.status(204).send(); // Empty response body
 });
-
-
-// ✅ GET /string/:value — Retrieve one
+// ✅ GET /strings/:value — Retrieve a specific string
 String_router.get("/:value", (req: Request, res: Response) => {
+  analyzeStrings = readDATA();
   const { value } = req.params;
+
   if (!analyzeStrings[value])
-    return res.status(404).json({ error: "Value does not exist" });
+    return res.status(404).json({ error: "String does not exist" });
 
   return res.status(200).json(analyzeStrings[value]);
 });
-
 export default String_router;
