@@ -182,58 +182,45 @@ exports.getcounrtyStatus = getcounrtyStatus;
 //getcountrybyimage
 const getCountrySummaryImage = async (req, res) => {
     try {
-        // 1️⃣ Total number of countries
         const totalCountries = await prisma.country.count();
-        // 2️⃣ Top 5 countries by estimated GDP
         const topGDP = await prisma.country.findMany({
             orderBy: { estimated_gdp: "desc" },
             take: 5,
             select: { name: true, estimated_gdp: true },
         });
-        // 3️⃣ Last refresh timestamp
         const latest = await prisma.country.findFirst({
             orderBy: { last_refreshed_at: "desc" },
             select: { last_refreshed_at: true },
         });
-        // Create canvas
         const canvas = (0, canvas_1.createCanvas)(1000, 500);
         const ctx = canvas.getContext("2d");
         // Background
-        ctx.fillStyle = "#f9fafb"; // clean light background
+        ctx.fillStyle = "#f9fafb";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        // Title
         ctx.fillStyle = "#111827";
         ctx.font = "bold 36px Arial";
         ctx.fillText("🌍 Global Country Summary", 40, 70);
-        // Total countries
         ctx.font = "24px Arial";
         ctx.fillText(`Total Countries: ${totalCountries}`, 60, 140);
-        // Top 5 GDP countries
         ctx.font = "bold 24px Arial";
         ctx.fillText("Top 5 Countries by Estimated GDP:", 60, 200);
         ctx.font = "22px Arial";
         topGDP.forEach((c, i) => {
             const gdpValue = c.estimated_gdp ?? 0;
-            ctx.fillText(`${i + 1}. ${c.name} - $${gdpValue.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-            })}`, 80, 240 + i * 40);
+            ctx.fillText(`${i + 1}. ${c.name} - $${gdpValue.toLocaleString()}`, 80, 240 + i * 40);
         });
-        // Last refresh timestamp
         ctx.font = "20px Arial";
         ctx.fillStyle = "#374151";
         ctx.fillText(`Last Refreshed: ${latest?.last_refreshed_at
             ? new Date(latest.last_refreshed_at).toLocaleString()
             : "N/A"}`, 60, 450);
-        // Generate image
+        // Save + respond with PNG
         const buffer = canvas.toBuffer("image/png");
-        //caches and saves the image
         const cacheDir = path_1.default.join(process.cwd(), "cache");
-        if (!fs_1.default.existsSync(cacheDir)) {
+        if (!fs_1.default.existsSync(cacheDir))
             fs_1.default.mkdirSync(cacheDir);
-        }
-        const filePath = path_1.default.join(cacheDir, "summary.png");
-        fs_1.default.writeFileSync(filePath, buffer);
-        console.log(`✅ Summary image saved at ${filePath}`);
+        fs_1.default.writeFileSync(path_1.default.join(cacheDir, "summary.png"), buffer);
+        // 🟢 Display image in browser
         res.setHeader("Content-Type", "image/png");
         res.setHeader("Content-Disposition", "inline; filename=summary.png");
         res.send(buffer);
@@ -241,9 +228,6 @@ const getCountrySummaryImage = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to generate image" });
-    }
-    finally {
-        await prisma.$disconnect();
     }
 };
 exports.getCountrySummaryImage = getCountrySummaryImage;

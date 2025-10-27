@@ -203,40 +203,33 @@ export const getcounrtyStatus = async (req: Request, res: Response) => {
 
 export const getCountrySummaryImage = async (req: Request, res: Response) => {
   try {
-    // 1️⃣ Total number of countries
     const totalCountries = await prisma.country.count();
 
-    // 2️⃣ Top 5 countries by estimated GDP
     const topGDP = await prisma.country.findMany({
       orderBy: { estimated_gdp: "desc" },
       take: 5,
       select: { name: true, estimated_gdp: true },
     });
 
-    // 3️⃣ Last refresh timestamp
     const latest = await prisma.country.findFirst({
       orderBy: { last_refreshed_at: "desc" },
       select: { last_refreshed_at: true },
     });
 
-    // Create canvas
     const canvas = createCanvas(1000, 500);
     const ctx = canvas.getContext("2d");
 
     // Background
-    ctx.fillStyle = "#f9fafb"; // clean light background
+    ctx.fillStyle = "#f9fafb";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Title
     ctx.fillStyle = "#111827";
     ctx.font = "bold 36px Arial";
     ctx.fillText("🌍 Global Country Summary", 40, 70);
 
-    // Total countries
     ctx.font = "24px Arial";
     ctx.fillText(`Total Countries: ${totalCountries}`, 60, 140);
 
-    // Top 5 GDP countries
     ctx.font = "bold 24px Arial";
     ctx.fillText("Top 5 Countries by Estimated GDP:", 60, 200);
 
@@ -244,15 +237,12 @@ export const getCountrySummaryImage = async (req: Request, res: Response) => {
     topGDP.forEach((c, i) => {
       const gdpValue = c.estimated_gdp ?? 0;
       ctx.fillText(
-        `${i + 1}. ${c.name} - $${gdpValue.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-        })}`,
+        `${i + 1}. ${c.name} - $${gdpValue.toLocaleString()}`,
         80,
         240 + i * 40
       );
     });
 
-    // Last refresh timestamp
     ctx.font = "20px Arial";
     ctx.fillStyle = "#374151";
     ctx.fillText(
@@ -265,24 +255,18 @@ export const getCountrySummaryImage = async (req: Request, res: Response) => {
       450
     );
 
-    // Generate image
+    // Save + respond with PNG
     const buffer = canvas.toBuffer("image/png");
-    //caches and saves the image
     const cacheDir = path.join(process.cwd(), "cache");
-    if (!fs.existsSync(cacheDir)) {
-      fs.mkdirSync(cacheDir);
-    }
-    const filePath = path.join(cacheDir, "summary.png");
-    fs.writeFileSync(filePath, buffer);
-    console.log(`✅ Summary image saved at ${filePath}`);
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir);
+    fs.writeFileSync(path.join(cacheDir, "summary.png"), buffer);
 
+    // 🟢 Display image in browser
     res.setHeader("Content-Type", "image/png");
     res.setHeader("Content-Disposition", "inline; filename=summary.png");
     res.send(buffer);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to generate image" });
-  } finally {
-    await prisma.$disconnect();
   }
 };
