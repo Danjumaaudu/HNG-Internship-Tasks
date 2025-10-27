@@ -267,7 +267,7 @@ export const getCountrySummaryImage = async (req: Request, res: Response) => {
 
     // Generate image
     const buffer = canvas.toBuffer("image/png");
-//caches and saves the image
+    //caches and saves the image
     const cacheDir = path.join(process.cwd(), "cache");
     if (!fs.existsSync(cacheDir)) {
       fs.mkdirSync(cacheDir);
@@ -277,6 +277,7 @@ export const getCountrySummaryImage = async (req: Request, res: Response) => {
     console.log(`✅ Summary image saved at ${filePath}`);
 
     res.setHeader("Content-Type", "image/png");
+    res.setHeader("Content-Disposition", "inline; filename=summary.png");
     res.send(buffer);
   } catch (error) {
     console.error(error);

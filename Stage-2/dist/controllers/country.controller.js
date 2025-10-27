@@ -235,6 +235,7 @@ const getCountrySummaryImage = async (req, res) => {
         fs_1.default.writeFileSync(filePath, buffer);
         console.log(`✅ Summary image saved at ${filePath}`);
         res.setHeader("Content-Type", "image/png");
+        res.setHeader("Content-Disposition", "inline; filename=summary.png");
         res.send(buffer);
     }
     catch (error) {
